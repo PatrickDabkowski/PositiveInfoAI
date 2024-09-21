@@ -97,4 +97,5 @@ def get_article_extracts(titles):
 articles = get_popular_articles()
 classifier = load_positive_classifier("mps")
 
-print(get_article_extracts(most_positive_title(classifier, articles)))
+if __name__ == "__main__":
+    print(get_article_extracts(most_positive_title(classifier, articles)))
