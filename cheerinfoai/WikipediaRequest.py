@@ -1,4 +1,5 @@
 from loadmodels import load_positive_classifier
+from bs4 import BeautifulSoup
 import requests
 
 class WikipediaAPI:
@@ -98,6 +99,14 @@ class WikipediaAPI:
             return extracts
         else:
             print("API Connection Failed")
+            
+    def return_text(self, html_text):
+
+        soup = BeautifulSoup(html_text, 'html.parser')
+        text = soup.get_text()
+        text = ' '.join(text.split())
+
+        return text
 
         
 if __name__ == "__main__":
