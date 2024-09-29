@@ -2,8 +2,8 @@ import torch
 from transformers import pipeline
 from transformers import BartTokenizer, BartForConditionalGeneration
 
-def load_bart(is_fast=True, is_quant=False):
-    tokenizer = BartTokenizer.from_pretrained('facebook/bart-base', is_fast=is_fast)
+def load_bart(is_fast=True, is_quant=False, max_length=None, truncation=False):
+    tokenizer = BartTokenizer.from_pretrained('facebook/bart-base', max_length=max_length, truncation=truncation, is_fast=True, clean_up_tokenization_spaces=False)
     model = BartForConditionalGeneration.from_pretrained('facebook/bart-base')
     
     if is_quant:
