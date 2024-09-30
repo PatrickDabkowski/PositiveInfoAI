@@ -1,7 +1,7 @@
-import torch
-from transformers import pipeline
 from transformers import BartTokenizer, BartForConditionalGeneration
-import wikipedia_request
+from diffusers import StableDiffusionPipeline
+from transformers import pipeline
+import torch
 
 def load_bart(is_fast=True, is_quant=False, max_length=None, truncation=False):
     tokenizer = BartTokenizer.from_pretrained('facebook/bart-base', max_length=max_length, truncation=truncation, is_fast=True, clean_up_tokenization_spaces=False, padding='longest')
@@ -22,6 +22,22 @@ def load_positive_bart(path: str, device: str, is_fast=True, is_quant=False, max
 
     return tokenizer, model
 
+def load_stablediffusion(device: str = 'cpu', is_quant: bool = False):
+    # torch.ao is not compatible with MPS device (30.09.2024)
+    
+    if is_quant:
+        pipeline = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", torch_dtype= torch.float32, device=device)
+        print(pipeline)
+        
+        pipeline.unet = torch.ao.quantization.quantize_dynamic(pipeline.unet, dtype=torch.qint8) 
+        pipeline.text_encoder = torch.ao.quantization.quantize_dynamic(pipeline.text_encoder, dtype=torch.qint8) 
+        pipeline.vae = torch.ao.quantization.quantize_dynamic(pipeline.vae, dtype=torch.qint8) 
+        
+        return pipeline
+    
+    pipeline = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16, variant="fp16", device=device)
+        
+    return pipeline.to(device)
 
 def load_positive_classifier(device):
     
@@ -29,5 +45,4 @@ def load_positive_classifier(device):
 
 
 if __name__ == "__main__":
-    print(f"file: {__name__}")
-    
+    print(f"file: {__name__}")    
