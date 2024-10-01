@@ -6,6 +6,7 @@ class WikipediaAPI:
     
     def __init__(self):
         self.classifier = load_positive_classifier("mps")
+        self.except_title = None
 
     def get_popular_articles(self):
         '''downloads list of currently 20 most viewed Wikipedia articles
@@ -30,6 +31,8 @@ class WikipediaAPI:
                 
                 for article in data["query"]["mostviewed"]:
                     self.articles = data["query"]["mostviewed"][3:]
+                    if self.except_title:
+                        self.articles = [article for article in self.articles if article['title'] != self.except_title]
             else:
                 print("No Data")
         else:
