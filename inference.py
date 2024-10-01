@@ -18,7 +18,7 @@ class Bot():
     def wrapp_title(self, except_title: str = None):
         # uses WikipediaAPI to extract title and abstract of most positive among most pupular Wikipedia artivles
         if (except_title != None) or (except_title != False):
-            print(except_title)
+
             self.wpapi.except_title = except_title
             self.wpapi.get_popular_articles()
             self.wpapi.most_positive_title()
@@ -33,7 +33,7 @@ class Bot():
         return key, val
     
     def generate(self, is_new: bool = None):
-        print(is_new)
+        
         if is_new == True: 
             if hasattr(self, 'title'):
                 self.title, self.abstract = self.wrapp_title(except_title=self.title)
