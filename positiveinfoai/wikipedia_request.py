@@ -12,31 +12,37 @@ class WikipediaAPI:
         '''downloads list of currently 20 most viewed Wikipedia articles
         self.articles (list): list of titles of most viewed Wikipedia articles without 3 first elements (main page etc.)'''
         
-        endpoint = "https://en.wikipedia.org/w/api.php"
+        if not hasattr(self, 'articles'):
         
-        params = {
-            "action": "query",
-            "format": "json",
-            "list": "mostviewed",
-            "pvimlimit": "20",  
-        }
-
-        response = requests.get(endpoint, params=params)
-        
-        if response.status_code == 200:
-    
-            data = response.json()
+            endpoint = "https://en.wikipedia.org/w/api.php"
             
-            if "mostviewed" in data["query"]:
+            params = {
+                "action": "query",
+                "format": "json",
+                "list": "mostviewed",
+                "pvimlimit": "20",  
+            }
+
+            response = requests.get(endpoint, params=params)
+            
+            if response.status_code == 200:
+        
+                data = response.json()
                 
-                for article in data["query"]["mostviewed"]:
-                    self.articles = data["query"]["mostviewed"][3:]
-                    if self.except_title:
-                        self.articles = [article for article in self.articles if article['title'] != self.except_title]
+                if "mostviewed" in data["query"]:
+                    
+                    for article in data["query"]["mostviewed"]:
+                        self.articles = data["query"]["mostviewed"][3:]
+                        if self.except_title:
+                            self.articles = [article for article in self.articles if article['title'] != self.except_title]
+                else:
+                    print("No Data")
             else:
-                print("No Data")
+                print("API Connection Faild")
+        
         else:
-            print("API Connection Faild")
+            if self.except_title:
+                            self.articles = [article for article in self.articles if article['title'] != self.except_title]
             
     def most_positive_title(self):
         '''clssifies positivness of all most viewed articles on Wikipedia (or any other list of strs)
