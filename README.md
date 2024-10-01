@@ -1,4 +1,4 @@
-# CheerInfoAI
+# PositiveInfoAI
 
 Have you recently entered social media? Currently, a lot of public attention and concern in the digital domain is focused on the topics of polarization and misinformation. 
 
