@@ -1,5 +1,5 @@
-from datasets import load_dataset, concatenate_datasets
 from torch.utils.data import Dataset, DataLoader
+from datasets import load_dataset, concatenate_datasets
 
 class CombinedDataset(Dataset):
     def __init__(self, set: str):
