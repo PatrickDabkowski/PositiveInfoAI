@@ -110,7 +110,7 @@ class FineTune:
         
         for epoch in range(epochs):
             # training 
-            #self.epoch()
+            self.epoch()
             # validation
             total_loss = self.valid_test(False)
             print(f"Epoch {epoch}, loss: {total_loss}")
