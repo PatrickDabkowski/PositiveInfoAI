@@ -15,9 +15,16 @@ class Bot():
         self.sd = positiveinfoai.load_stablediffusion(device_sd, is_quant)
         self.wpapi = positiveinfoai.WikipediaAPI()
         
-    def wrapp_title(self):
+    def wrapp_title(self, except_title: str = None):
         # uses WikipediaAPI to extract title and abstract of most positive among most pupular Wikipedia artivles
-        info = self.wpapi.get_article_extracts()
+        if (except_title != None) or (except_title != False):
+            print(except_title)
+            self.wpapi.except_title = except_title
+            self.wpapi.get_popular_articles()
+            self.wpapi.most_positive_title()
+            info = self.wpapi.get_article_extracts()
+        else:
+            info = self.wpapi.get_article_extracts()
         # unpack dict
         key = next(iter(info))
         # html -> text
@@ -26,9 +33,12 @@ class Bot():
         return key, val
     
     def generate(self, is_new: bool = None):
-        
-        if is_new == True:  
-            self.title, self.abstract = self.wrapp_title()
+        print(is_new)
+        if is_new == True: 
+            if hasattr(self, 'title'):
+                self.title, self.abstract = self.wrapp_title(except_title=self.title)
+            else:
+                self.title, self.abstract = self.wrapp_title()
         else:
             if not hasattr(self, 'title') and not hasattr(self, 'abstract'):
                self.title, self.abstract = self.wrapp_title()  
@@ -42,6 +52,9 @@ class Bot():
         img = self.sd(self.title)
         
         return text, img
+    
+    def __call__(self, is_new: bool = None):
+        return self.generate(is_new)
  
 if __name__ == "__main__":
     print(f"file: {__name__}")      
