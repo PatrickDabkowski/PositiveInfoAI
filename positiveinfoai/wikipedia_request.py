@@ -1,6 +1,6 @@
-from loadmodels import load_positive_classifier
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
+from .loadmodels import load_positive_classifier
 
 class WikipediaAPI:
     
