@@ -3,6 +3,13 @@ import os
 
 class Bot():
     def __init__(self, device_bart='cpu', device_sd='cpu', is_fast=True, is_quant=False):
+        '''Initialize Bot object that contains BART pre-trained model, Stable Diffusion model and WikipediaAPI
+        Args:
+            device_bart (str): BART model device compatable with Torch (CUDA, CPU, MPS),
+            device_sd (str):  Stable Diffusion model device compatable with Torch (CUDA, CPU, MPS),
+            is_fast (bool): BART parameter,
+            is_quant (bool): model quantization
+               '''
         if os.path.exists("positiveinfoai/models/positive_bart.pt"):
             print("run positive BART")
             self.tokenizer, self.model = positiveinfoai.load_positive_bart("positiveinfoai/models/positive_bart.pt", 
@@ -16,7 +23,7 @@ class Bot():
         self.wpapi = positiveinfoai.WikipediaAPI()
         
     def wrapp_title(self, except_title: str = None):
-        # uses WikipediaAPI to extract title and abstract of most positive among most pupular Wikipedia artivles
+        '''uses WikipediaAPI to extract title and abstract of most positive among most pupular Wikipedia artivles'''
         if (except_title != None) or (except_title != False):
 
             self.wpapi.except_title = except_title
@@ -33,7 +40,8 @@ class Bot():
         return key, val
     
     def generate(self, is_new: bool = None):
-        
+        '''returns text of positive post and generated image based on currently most popular and positive Wikipedia article
+        if is_new=True, we reject previous title (from Wikipedia)'''
         if is_new == True: 
             if hasattr(self, 'title'):
                 self.title, self.abstract = self.wrapp_title(except_title=self.title)
