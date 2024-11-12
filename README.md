@@ -6,4 +6,4 @@ This project addresses that concern by leveraging transfer learning of existing 
 
 Gradio Demo of Positive Post Generation:
 
-<img src="images/img_1.png" alt="Positive Post" width="300"/>
+<img src="images/img_1.png" alt="Positive Post" width="800"/>
